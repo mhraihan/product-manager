@@ -1,0 +1,16 @@
+//
+// Avatar
+//
+
+@import "../core/avatars/avatar";
+@import "../core/avatars/avatar-group";
+.avatar{
+  border-radius: 0;
+  &.avatar-xl{
+    width: 100px;
+    height: 100%;
+  }
+  img{
+    border-radius: 0;
+  }
+}
