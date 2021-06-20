@@ -20,10 +20,12 @@
         </h4>
       </b-col>
       <b-col md="auto">
-        <base-button @click="show(product)" :type="type" size="xl">
-          <i :class="icon"></i>
-          Create Mix Match product
-        </base-button>
+        <router-link :to="id(product)" exact>
+          <base-button :type="type" size="xl">
+            <i :class="icon"></i>
+            Create Mix Match product
+          </base-button>
+        </router-link>
       </b-col>
     </b-row>
     <b-row v-if="products.length == 0">
@@ -68,6 +70,9 @@ export default {
   methods: {
     show(product) {
       console.log(product);
+    },
+    id(product) {
+      return `/product/${product.id}`;
     },
   },
 };

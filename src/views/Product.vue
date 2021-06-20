@@ -5,18 +5,13 @@
       <!-- Card stats -->
       <b-row>
         <b-col xl="12" md="12">
-          <stats-card
+          <product-card
             title="Total traffic"
-            type="gradient-red"
             sub-title="350,897"
             icon="ni ni-active-40"
             class="mb-4"
           >
-            <template slot="footer">
-              <span class="text-success mr-2">3.48%</span>
-              <span class="text-nowrap">Since last month</span>
-            </template>
-          </stats-card>
+          </product-card>
         </b-col>
       </b-row>
     </base-header>
@@ -62,7 +57,9 @@
 </template>
 <script>
 import BaseHeader from "@/components/BaseHeader";
-
+import store from "store";
+import axios from "axios";
+import { findIndex } from "lodash";
 export default {
   name: "product",
   components: {
@@ -71,11 +68,18 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      product: this.$route.props,
     };
   },
-  methods: {},
+  methods: {
+    getProduct(id) {
+      const products = JSON.parse(store.get("ajax-products"));
+      console.log(products);
+    },
+  },
   mounted() {
-    console.log(this.id);
+    console.log(this.product);
+    // this.getProduct(this.id);
   },
 };
 </script>

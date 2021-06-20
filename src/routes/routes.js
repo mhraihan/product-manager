@@ -27,6 +27,7 @@ const routes = [
       {
         path: "/product/:id",
         name: "Mix Match product",
+        props: true,
         component: () =>
           import(/* webpackChunkName: "demo" */ "../views/Product.vue")
       },
