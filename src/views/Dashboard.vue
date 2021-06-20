@@ -1,8 +1,6 @@
 <template>
   <div>
     <notifications></notifications>
-
-
     <base-header class="pb-6 pb-8 pt-5 pt-md-8 bg-gray">
       <!--Tables-->
       <b-row class="mt-5">
@@ -25,122 +23,14 @@
                       <template v-slot:title class="py-3">
                         <i class="fas fa-tag"></i> Remove Personalize Label
                       </template>
-                      <div class="pt-5">
-                        <b-row
-                          v-for="product in engrave"
-                          :key="product.id"
-                          align-v="center"
-                          class="pb-3 mb-3 border-bottom"
-                        >
-                          <b-col md="auto">
-                            <!-- Avatar -->
-                            <a href="javascript:;" class="avatar avatar-xl">
-                              <img
-                                alt="Image placeholder"
-                                :src="product.image.src"
-                              />
-                            </a>
-                          </b-col>
-                          <b-col class="ml--2">
-                            <h4 class="mb-0">
-                              <a
-                                :href="'/products/' + product.handle"
-                                target="blank"
-                                >{{ product.title }}</a
-                              >
-                            </h4>
-                            <p class="text-sm text-muted mb-0"></p>
-                            <span class="text-success">● </span>
-                            <small>Active</small>
-                          </b-col>
-                          <b-col md="auto">
-                            <base-button
-                              @click="removeTag(product)"
-                              type="danger"
-                              size="xl"
-                            >
-                              <i class="far fa-trash-alt fa-2x"></i>
-                            </base-button>
-                          </b-col>
-                        </b-row>
-                        <b-row v-if="engrave.length == 0">
-                          <b-col md="auto">
-                            <p>Sorry, no Personalize Label product is available. Add some product</p>
-                          </b-col>
-                        </b-row>
-                        <!-- engrave pagination -->
-                        <b-row v-if="engrave.length > 0">
-                          <b-col md="auto">
-                            <b-pagination
-                              v-model="currentPage"
-                              :total-rows="rows"
-                              :per-page="perPage"
-                              first-number
-                            ></b-pagination>
-                          </b-col>
-                        </b-row>
-                      </div>
+                      <Engrave :engrave="engrave" :rows="Math.ceil(engrave.length / limit)" :handleEvent="removeTag" :type="'danger'"/>
                     </b-tab>
 
                     <b-tab>
                       <template v-slot:title>
                         <i class="fas fa-user-tag"></i> Add Personalize Label
                       </template>
-                      <div class="pt-5">
-                        <b-row
-                          v-for="product in noEngravePage"
-                          :key="product.id"
-                          align-v="center"
-                          class="pb-3 mb-3 border-bottom"
-                        >
-                          <b-col md="auto">
-                            <!-- Avatar -->
-                            <a href="javascript:;" class="avatar avatar-xl">
-                              <img
-                                alt="Image placeholder"
-                                :src="product.image.src"
-                              />
-                            </a>
-                          </b-col>
-                          <b-col class="ml--2">
-                            <h4 class="mb-0">
-                              <a
-                                :href="'/products/' + product.handle"
-                                target="blank"
-                                >{{ product.title }}</a
-                              >
-                            </h4>
-                            <p class="text-sm text-muted mb-0"></p>
-                            <span class="text-success">● </span>
-                            <small>Active</small>
-                          </b-col>
-                          <b-col md="auto">
-                            <base-button
-                              @click="addTag(product)"
-                              type="info"
-                              size="xl"
-                            >
-                              <i class="fas fa-plus fa-2x"></i>
-                            </base-button>
-                          </b-col>
-                        </b-row>
-                        <b-row v-if="noEngrave.length == 0">
-                          <b-col md="auto">
-                            <p>Sorry, all products are enable Personalize Label.</p>
-                          </b-col>
-                        </b-row>
-                        <!-- noEngrave pagination -->
-                        <b-row v-if="engrave.length > 0">
-                          <b-col md="auto">
-                            <b-pagination
-                              v-model="currentPage"
-                              :total-rows="rows"
-                              :per-page="perPage"
-                              first-number
-                            ></b-pagination>
-                          </b-col>
-                        </b-row>
-                      </div>
+                      <Engrave :handleEvent="addTag" :engrave="noEngrave" :rows="Math.ceil(noEngrave.length / limit)" :type="'success'"/>
                     </b-tab>
                   </b-tabs>
                 </div>
@@ -149,23 +39,21 @@
           </card>
         </b-col>
         <b-col xl="6" class="mb-5 mb-xl-0">
-          <social-traffic-table></social-traffic-table>
+
         </b-col>
       </b-row>
     </base-header>
   </div>
 </template>
 <script>
-// Tables
-import SocialTrafficTable from "./Dashboard/SocialTrafficTable";
-import PageVisitsTable from "./Dashboard/PageVisitsTable";
+
 import axios from "axios";
 import _ from "lodash";
-import pagination from 'element-ui';
+import Engrave from "../components/Custom/Engrave.vue";
+
 export default {
   components: {
-    PageVisitsTable,
-    SocialTrafficTable
+    Engrave
   },
   data() {
     return {
@@ -173,29 +61,15 @@ export default {
       baseProducts: [],
       engrave: [],
       noEngrave: [],
-      noEngravePaginate:[],
       limit: 10,
-      rows: 4,
-      perPage: 1,
-      currentPage: 1
     };
   },
   watch: {
-    currentPage(current,prev){
-      console.log(prev,current);
-      this.paginate();
-    }
   },
   computed: {
-    noEngravePage() {
-      return  _(this.noEngrave).slice((this.currentPage-1)*this.limit).take(this.limit).value();
-    }
   },
   methods: {
-    paginate(){
-      console.log(this.currentPage);
-     this.noEngravePaginate =  _(this.noEngrave).slice((this.currentPage-1)*this.limit).take(this.limit).value();
-    },
+
     getProducts() {
       axios
         .get(`http://localhost:8000/products`)
@@ -232,8 +106,6 @@ export default {
       this.products = products;
       this.baseProducts = products;
       this.noEngrave = noEngrave;
-      this.rows = Math.ceil(this.noEngrave.length/10)
-      this.paginate();
       console.log(noEngrave);
     },
     addTag(product) {
@@ -241,33 +113,42 @@ export default {
 
       let products = this.noEngrave;
       const idx = _.findIndex(products, ["id", product.id]);
-      if(idx != -1){
+      if (idx != -1) {
         this.engrave.push(product);
         console.log(products.splice(idx, 1));
-        this.rows = Math.ceil(this.noEngrave.length/10);
-        this.updateTag(product,'add');
+        this.rows = Math.ceil(this.noEngrave.length / 10);
+        this.updateTag(product, "add");
       }
     },
     removeTag(product) {
       console.log(product);
 
-
       let products = this.engrave;
       const idx = _.findIndex(products, ["id", product.id]);
-      if(idx != -1){
+      if (idx != -1) {
         this.noEngrave.push(product);
         console.log(products.splice(idx, 1));
-        this.rows = Math.ceil(this.noEngrave.length/10);
-        this.updateTag(product,'remove');
+        this.rows = Math.ceil(this.noEngrave.length / 10);
+        this.updateTag(product, "remove");
       }
     },
 
-    updateTag(product,type) {
+    updateTag(product, type) {
       console.log(type);
-      if(type == 'add'){
-        this.$notify({verticalAlign: 'top', horizontalAlign: 'right', type: 'success', message: `Personalize label enbaled for ${product.title}!`});
-      } else{
-        this.$notify({verticalAlign: 'top', horizontalAlign: 'right', type: 'danger', message: `Personalize label removed from ${product.title}`});
+      if (type == "add") {
+        this.$notify({
+          verticalAlign: "top",
+          horizontalAlign: "right",
+          type: "success",
+          message: `Personalize label enbaled for ${product.title}!`
+        });
+      } else {
+        this.$notify({
+          verticalAlign: "top",
+          horizontalAlign: "right",
+          type: "danger",
+          message: `Personalize label removed from ${product.title}`
+        });
       }
       axios
         .post(`http://localhost:8000/products/${product.id}/update`, {
