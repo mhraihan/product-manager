@@ -6,9 +6,8 @@
       <b-row>
         <b-col xl="12" md="12">
           <product-card
-            title="Total traffic"
-            sub-title="350,897"
-            icon="ni ni-active-40"
+            :title="product.title"
+            :image="product.image"
             class="mb-4"
           >
           </product-card>
@@ -57,9 +56,9 @@
 </template>
 <script>
 import BaseHeader from "@/components/BaseHeader";
-import store from "store";
+
 import axios from "axios";
-import { findIndex } from "lodash";
+
 export default {
   name: "product",
   components: {
@@ -68,18 +67,27 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      product: this.$route.props,
+      product: this.$route.params.product,
     };
   },
   methods: {
     getProduct(id) {
-      const products = JSON.parse(store.get("ajax-products"));
-      console.log(products);
+      console.log(id);
+      axios
+        .get(`http://localhost:8000/m/${id}`)
+        .then((res) => {
+          // let { products } = res.data;
+          console.log("from ajax data");
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
   mounted() {
     console.log(this.$route.params.product);
-    // this.getProduct(this.id);
+    this.getProduct(this.id);
   },
 };
 </script>

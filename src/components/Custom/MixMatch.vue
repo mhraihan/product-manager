@@ -77,13 +77,6 @@ export default {
       return this.type === "danger" ? "far  fa-trash-alt" : "fas  fa-plus";
     },
   },
-  methods: {
-    show(product) {
-      console.log(product);
-    },
-    id(product) {
-      return `/product/${product.id}`;
-    },
-  },
+  methods: {},
 };
 </script>
