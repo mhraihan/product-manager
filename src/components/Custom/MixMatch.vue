@@ -9,7 +9,7 @@
       <b-col md="auto">
         <!-- Avatar -->
         <a href="javascript:;" class="avatar avatar-xl">
-          <product-img />
+          <product-img :image="product.image" />
         </a>
       </b-col>
       <b-col class="ml--2">
