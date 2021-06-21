@@ -4,6 +4,7 @@ import Card from "@/components/Cards/Card.vue";
 import Modal from "@/components/Modal.vue";
 import StatsCard from "@/components/Cards/StatsCard.vue";
 import ProductCard from "@/components/Cards/ProductCard.vue";
+import ProductImg from "@/components/Cards/ProductImg.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import Badge from "@/components/Badge.vue";
 import BaseCheckbox from "@/components/Inputs/BaseCheckbox.vue";
@@ -36,6 +37,7 @@ const GlobalComponents = {
     Vue.component(Modal.name, Modal);
     Vue.component(StatsCard.name, StatsCard);
     Vue.component(ProductCard.name, ProductCard);
+    Vue.component(ProductImg.name, ProductImg);
     Vue.component(Input.name, Input);
     Vue.component("validation-provider", ValidationProvider);
     Vue.component("validation-observer", ValidationObserver);

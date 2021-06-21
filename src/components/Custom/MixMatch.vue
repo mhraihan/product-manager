@@ -9,14 +9,16 @@
       <b-col md="auto">
         <!-- Avatar -->
         <a href="javascript:;" class="avatar avatar-xl">
-          <img alt="Image placeholder" :src="product.image.src" />
+          <product-img />
         </a>
       </b-col>
       <b-col class="ml--2">
         <h4 class="mb-0">
-          <a :href="'/products/' + product.handle" target="blank">{{
-            product.title
-          }}</a>
+          <a
+            :href="'https://blaizecaprice.com/products/' + product.handle"
+            target="blank"
+            >{{ product.title }}</a
+          >
         </h4>
       </b-col>
       <b-col md="auto">
@@ -47,7 +49,9 @@
   </div>
 </template>
 <script>
+import ProductImg from "../Cards/ProductImg.vue";
 export default {
+  components: { ProductImg },
   props: ["products", "rows", "type"],
   data() {
     return {
