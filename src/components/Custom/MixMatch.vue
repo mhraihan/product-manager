@@ -2,7 +2,7 @@
   <div class="pt-5">
     <b-row
       v-for="product in productsPage"
-      :key="product.id"
+      :key="product.handle"
       align-v="center"
       class="pb-3 mb-3 border-bottom"
     >

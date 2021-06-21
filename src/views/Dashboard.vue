@@ -111,7 +111,7 @@ export default {
           .then((res) => {
             let { products } = res.data;
             console.log("from ajax data");
-            store.set("ajax-products", JSON.stringify(products));
+            this.updateStoreProduct(products);
             this.getProductByTag(products);
           })
           .catch((e) => {
@@ -121,52 +121,55 @@ export default {
     },
     getProductByTag(products = []) {
       let noEngrave = [];
-      this.engrave = products
-        .filter((o) => {
-          if (o.tags.indexOf("engrave") == -1) noEngrave.push(o);
-          return o.tags.indexOf("engrave") != -1;
-        })
-        .map((p) => {
-          let tags = p.tags.split(",").map((t) => t.trim());
-
-          let idx = tags.indexOf("engrave");
-          if (idx != -1) {
-            tags.splice(idx, 1);
-            p.tags = tags.join(",");
-          }
-          return p;
-        });
-      noEngrave = noEngrave.map((p) => {
-        if (typeof p.tags == "string") p.tags = p.tags + ", engrave";
-        if (typeof p.tags == "object") p.tags.push("engrave");
-        return p;
+      this.engrave = products.filter((o) => {
+        if (o.tags.indexOf("engrave") == -1) noEngrave.push(o);
+        return o.tags.indexOf("engrave") != -1;
       });
       this.products = products;
       this.baseProducts = products;
       this.noEngrave = noEngrave;
       console.log(noEngrave);
     },
+    updateStoreProduct(products = []) {
+      store.set("ajax-products", JSON.stringify(products));
+    },
+    tagsFilter(p) {
+      let tags = p.tags.split(",").map((t) => t.trim());
+
+      let idx = tags.indexOf("engrave");
+      if (idx != -1) {
+        tags.splice(idx, 1);
+      } else {
+        tags.push("engrave");
+      }
+      p.tags = tags.join(",");
+      return p;
+    },
     addTag(product) {
       console.log(product);
 
-      let products = this.noEngrave;
-      const idx = findIndex(products, ["id", product.id]);
+      let ref = this.noEngrave;
+      const idx = findIndex(ref, ["id", product.id]);
       if (idx != -1) {
-        this.engrave.push(product);
-        console.log(products.splice(idx, 1));
+        console.log(ref.splice(idx, 1));
         this.rows = Math.ceil(this.noEngrave.length / 10);
+        product = this.tagsFilter(product);
+        this.engrave.push(product);
+        this.updateStoreProduct(this.products);
         this.updateTag(product, "add");
       }
     },
     removeTag(product) {
       console.log(product);
 
-      let products = this.engrave;
-      const idx = findIndex(products, ["id", product.id]);
+      let ref = this.engrave;
+      const idx = findIndex(ref, ["id", product.id]);
       if (idx != -1) {
-        this.noEngrave.push(product);
-        console.log(products.splice(idx, 1));
+        console.log(ref.splice(idx, 1));
         this.rows = Math.ceil(this.noEngrave.length / 10);
+        product = this.tagsFilter(product);
+        this.noEngrave.unshift(product);
+        this.updateStoreProduct(this.products);
         this.updateTag(product, "remove");
       }
     },
