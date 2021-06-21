@@ -22,7 +22,13 @@
         </h4>
       </b-col>
       <b-col md="auto">
-        <router-link :to="id(product)" exact>
+        <router-link
+          :to="{
+            name: 'Mix Match product',
+            params: { product: product, id: product.id },
+          }"
+          exact
+        >
           <base-button :type="type" size="xl">
             <i :class="icon"></i>
             Create Mix Match product
