@@ -67,13 +67,16 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      product: this.$route.params.product,
+      product: {},
     };
   },
+  computed: {},
   methods: {
     getProduct(id) {
       console.log(id);
-      axios
+      this.product = this.$store.getters.getProduct(id);
+      console.log(this.product);
+      /*       axios
         .get(`http://localhost:8000/m/${id}`)
         .then((res) => {
           // let { products } = res.data;
@@ -82,11 +85,10 @@ export default {
         })
         .catch((e) => {
           console.log(e);
-        });
+        }); */
     },
   },
   mounted() {
-    console.log(this.$route.params.product);
     this.getProduct(this.id);
   },
 };

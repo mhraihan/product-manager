@@ -75,9 +75,9 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 import { findIndex } from "lodash";
-import store from "store";
 import Engrave from "../components/Custom/Engrave.vue";
 import MixMatch from "../components/Custom/MixMatch.vue";
 
@@ -88,50 +88,23 @@ export default {
   },
   data() {
     return {
-      products: [],
-      baseProducts: [],
-      engrave: [],
-      noEngrave: [],
       limit: 10,
     };
   },
   watch: {},
-  computed: {},
+  computed: {
+    ...mapGetters({
+      products: "getProducts",
+      engrave: "engrave",
+      noEngrave: "noEngrave",
+    }),
+  },
   methods: {
-    getProducts() {
-      if (store.get("ajax-products")) {
-        const products = JSON.parse(store.get("ajax-products"));
-        console.log("from store js");
-        setTimeout(() => {
-          this.getProductByTag(products);
-        }, 150);
-      } else {
-        axios
-          .get(`http://localhost:8000/products`)
-          .then((res) => {
-            let { products } = res.data;
-            console.log("from ajax data");
-            this.updateStoreProduct(products);
-            this.getProductByTag(products);
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-    },
-    getProductByTag(products = []) {
-      let noEngrave = [];
-      this.engrave = products.filter((o) => {
-        if (o.tags.indexOf("engrave") == -1) noEngrave.push(o);
-        return o.tags.indexOf("engrave") != -1;
-      });
-      this.products = products;
-      this.baseProducts = products;
-      this.noEngrave = noEngrave;
-      console.log(noEngrave);
-    },
-    updateStoreProduct(products = []) {
-      store.set("ajax-products", JSON.stringify(products));
+    ...mapActions({
+      fetchProducts: "fetchProducts",
+    }),
+    async getProducts() {
+      await this.fetchProducts();
     },
     tagsFilter(p) {
       let tags = p.tags.split(",").map((t) => t.trim());
@@ -154,8 +127,6 @@ export default {
         console.log(ref.splice(idx, 1));
         this.rows = Math.ceil(this.noEngrave.length / 10);
         product = this.tagsFilter(product);
-        this.engrave.push(product);
-        this.updateStoreProduct(this.products);
         this.updateTag(product, "add");
       }
     },
@@ -168,8 +139,6 @@ export default {
         console.log(ref.splice(idx, 1));
         this.rows = Math.ceil(this.noEngrave.length / 10);
         product = this.tagsFilter(product);
-        this.noEngrave.unshift(product);
-        this.updateStoreProduct(this.products);
         this.updateTag(product, "remove");
       }
     },
