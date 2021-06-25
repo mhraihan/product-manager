@@ -125,7 +125,7 @@ export default {
       const idx = findIndex(ref, ["id", product.id]);
       if (idx != -1) {
         console.log(ref.splice(idx, 1));
-        this.rows = Math.ceil(this.noEngrave.length / 10);
+        this.rows = Math.ceil(this.noEngrave.length / this.limit);
         product = this.tagsFilter(product);
         this.updateTag(product, "add");
       }
@@ -137,7 +137,7 @@ export default {
       const idx = findIndex(ref, ["id", product.id]);
       if (idx != -1) {
         console.log(ref.splice(idx, 1));
-        this.rows = Math.ceil(this.noEngrave.length / 10);
+        this.rows = Math.ceil(this.noEngrave.length / this.limit);
         product = this.tagsFilter(product);
         this.updateTag(product, "remove");
       }
