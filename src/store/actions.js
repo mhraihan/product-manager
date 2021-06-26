@@ -12,3 +12,15 @@ export const fetchProducts = ({ commit }) => {
       console.log(e);
     });
 };
+export const getMetafields = ({ commit }, id) => {
+  axios
+    .get(`http://localhost:8000/m/${id}`)
+    .then(res => {
+      commit("SET_METAFIELDS", res.data.metafields);
+      console.log("from ajax data");
+      console.log(res.data.metafields);
+    })
+    .catch(e => {
+      console.log(e);
+    });
+};

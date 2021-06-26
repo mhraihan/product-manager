@@ -1,3 +1,5 @@
+export const getMetafields = state => state.metafields;
+
 export const getProducts = state => state.products;
 export const getProduct = state => id => {
   return state.products.find(p => p.id == id);

@@ -1,3 +1,4 @@
 export default {
-  products: JSON.parse(localStorage.getItem("vuex") || "[]")
+  products: JSON.parse(localStorage.getItem("vuex") || "[]"),
+  metafields: []
 };

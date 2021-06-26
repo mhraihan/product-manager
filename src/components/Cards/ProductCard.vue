@@ -4,7 +4,7 @@
       <b-col cols="auto">
         <slot name="icon">
           <div class="text-white">
-            <a href="javascript:;" class="avatar avatar-xl">
+            <a :href="url" class="avatar avatar-xl">
               <product-img :image="image" />
             </a>
           </div>
@@ -38,7 +38,15 @@ export default {
       default: "primary",
     },
     title: String,
+    handle: String,
     image: {},
+  },
+  computed: {
+    url() {
+      return this.handle
+        ? `https://blaizecaprice.com/products/${this.handle}`
+        : "#";
+    },
   },
 };
 </script>
