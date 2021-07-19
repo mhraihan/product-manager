@@ -1,7 +1,7 @@
 import axios from "axios";
 export const fetchProducts = ({ commit }) => {
   axios
-    .get(`http://localhost:8000/products`)
+    .get(`http://themebuz.com/product-api/public/products`)
     .then(res => {
       let { products } = res.data;
       console.log("from ajax data");
@@ -14,7 +14,7 @@ export const fetchProducts = ({ commit }) => {
 };
 export const getMetafields = ({ commit }, id) => {
   axios
-    .get(`http://localhost:8000/m/${id}`)
+    .get(`http://themebuz.com/product-api/public/m/${id}`)
     .then(res => {
       commit("SET_METAFIELDS", res.data.metafields);
       console.log("from ajax data");

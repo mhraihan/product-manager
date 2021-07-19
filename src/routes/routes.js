@@ -10,6 +10,15 @@ const routes = [
     component: DashboardLayout,
     children: [
       {
+        path: "/",
+        name: "Product Customizer",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "demo" */ "../views/Dashboard.vue")
+      },
+      {
         path: "/dashboard",
         name: "Product Customizer",
         // route level code-splitting
@@ -40,10 +49,10 @@ const routes = [
           )
       },
       {
-        path: "/maps",
-        name: "maps",
+        path: "/color",
+        name: "color",
         component: () =>
-          import(/* webpackChunkName: "demo" */ "../views/GoogleMaps.vue")
+          import(/* webpackChunkName: "demo" */ "../views/Color.vue")
       },
       {
         path: "/tables",

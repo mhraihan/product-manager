@@ -161,9 +161,12 @@ export default {
         });
       }
       axios
-        .post(`http://localhost:8000/products/${product.id}/update`, {
-          tags: product.tags,
-        })
+        .post(
+          `http://themebuz.com/product-api/public/products/${product.id}/update`,
+          {
+            tags: product.tags,
+          }
+        )
         .then(function (response) {
           console.log(response);
         })
