@@ -22,6 +22,9 @@
     </button>
     <div class="my-3">
       <div class="pt-5 hello">
+        <div class="text-center" v-if="!loaded">
+          <DualRingLoader :color="'#2dce89'" />
+        </div>
         <draggable v-model="addedProducts" ghost-class="ghost" @end="onEnd">
           <transition-group type="transition" name="flip-list">
             <b-row
@@ -80,9 +83,9 @@
           >
         </div>
 
-        <b-row v-if="products.length == 0">
+        <b-row v-if="addedProducts.length == 0 && loaded">
           <b-col md="auto">
-            <p>Sorry, product is available.</p>
+            <p>Sorry,no mix and match products found.</p>
           </b-col>
         </b-row>
         <!-- products pagination -->
@@ -106,7 +109,7 @@ import draggable from "vuedraggable";
 import axios from "axios";
 import TabProduct from "./TabProduct.vue";
 import MixChildProduct from "./MixChildProduct.vue";
-
+import { DualRingLoader } from "vue-spinners-css";
 export default {
   name: "product",
   props: ["id", "title", "product"],
@@ -115,6 +118,7 @@ export default {
     "tab-products": TabProduct,
     "mix-child-products": MixChildProduct,
     draggable,
+    DualRingLoader,
   },
   data() {
     return {
@@ -129,6 +133,7 @@ export default {
       currentPage: 1,
       mixrows: 1,
       rows: 1,
+      loaded: false,
     };
   },
   computed: {
@@ -236,6 +241,7 @@ export default {
       console.log("timeout");
       this.getProduct(this.id);
       this.addedrows();
+      this.loaded = true;
     }, 3000);
   },
 };
@@ -255,6 +261,22 @@ export default {
 }
 .sortable:nth-child(2) {
   box-shadow: 0 3px 10px rgba(68, 68, 68, 0.6);
+  position: relative;
+}
+.sortable:nth-child(2):after {
+  content: "Featured";
+  position: absolute;
+  font: bold 15px sans-serif;
+  color: #333;
+  text-align: center;
+  padding: 7px 0;
+  top: 0;
+  right: 0;
+  min-width: 120px;
+  background-color: #2dce89;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 .ghost {
   border-left: 6px solid rgb(0, 183, 255);
